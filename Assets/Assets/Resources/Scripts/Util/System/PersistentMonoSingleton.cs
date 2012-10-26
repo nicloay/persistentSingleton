@@ -3,6 +3,17 @@ using System.Reflection;
 using System;
 using System.Collections.Generic;
 
+/*
+ * Base class for persistent singleton
+ *    Just derrive from this classs, and your class will suport [Persistent] attributes and 
+ * basic operation (save/read/reset)
+ *
+ * If you want to see values in editor, attach your new class to any game object in the scene,
+ * if you don't have any instances of your singleton class in editor, new gameObject will be created automaticaly.
+ *
+ */
+
+
 
 struct PlayerPrefEntry{
 	public PlayerPrefEntry (string attributeName, string fieldName, object fieldValue,Type fieldType)

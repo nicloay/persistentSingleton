@@ -20,7 +20,8 @@ using System.Collections;
  */ 
 
 [Persistent("playerSetup",true)]
-public class PlayerPreferences : PersistentMonoSingleton<PlayerPreferences> {
+public class PlayerPreferences 
+	: PersistentMonoSingleton<PlayerPreferences> {
 	
 	[Persistent("myIntVar")]
 	public int myIntVar;
@@ -35,6 +36,5 @@ public class PlayerPreferences : PersistentMonoSingleton<PlayerPreferences> {
 	
 	[Persistent]
 	public string myString;
-	
-	
+		
 }
