@@ -36,5 +36,8 @@ public class PlayerPreferences
 	
 	[Persistent]
 	public string myString;
+	
+	[Persistent]
+	public bool myBool;
 		
 }

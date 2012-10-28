@@ -14,29 +14,6 @@ using System.Collections.Generic;
  */
 
 
-
-/*static Dictionary<Type, > _dict = new Dictionary<string, string>
-    {
-	{"entry", "entries"},
-	{"image", "images"},
-	{"view", "views"},
-	{"file", "files"},
-	{"result", "results"},
-	{"word", "words"},
-	{"definition", "definitions"},
-	{"item", "items"},
-	{"megabyte", "megabytes"},
-	{"game", "games"}
-    };
-
- */
-
-
-
-
-
-
-
 struct PlayerPrefEntry{
 	public PlayerPrefEntry (string attributeName, string fieldName, object fieldValue,Type fieldType)
 	{
@@ -60,7 +37,8 @@ public abstract class PersistentMonoSingleton<T> : MonoSingleton<T> where T:Mono
 	{
 		{typeof(int),new IntPlayerPrefsStrategyImpl()},
 		{typeof(float),new FloatPlayerPrefsStrategyImpl()},
-		{typeof(string),new StringPlayerPrefsStrategyImpl()}
+		{typeof(string),new StringPlayerPrefsStrategyImpl()},
+		{typeof(bool),new BoolPlayerPrefsStrategyImpl()}
 	};
 	
 	
