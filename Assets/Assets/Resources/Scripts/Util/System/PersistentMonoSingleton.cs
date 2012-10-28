@@ -15,6 +15,28 @@ using System.Collections.Generic;
 
 
 
+/*static Dictionary<Type, > _dict = new Dictionary<string, string>
+    {
+	{"entry", "entries"},
+	{"image", "images"},
+	{"view", "views"},
+	{"file", "files"},
+	{"result", "results"},
+	{"word", "words"},
+	{"definition", "definitions"},
+	{"item", "items"},
+	{"megabyte", "megabytes"},
+	{"game", "games"}
+    };
+
+ */
+
+
+
+
+
+
+
 struct PlayerPrefEntry{
 	public PlayerPrefEntry (string attributeName, string fieldName, object fieldValue,Type fieldType)
 	{
@@ -34,6 +56,16 @@ struct PlayerPrefEntry{
 
 public abstract class PersistentMonoSingleton<T> : MonoSingleton<T> where T:MonoSingleton<T>
 {		
+	private static Dictionary<Type,PlayerPrefsStrategyInterface> strategyDictionary=new Dictionary<Type, PlayerPrefsStrategyInterface>()
+	{
+		{typeof(int),new IntPlayerPrefsStrategyImpl()},
+		{typeof(float),new FloatPlayerPrefsStrategyImpl()},
+		{typeof(string),new StringPlayerPrefsStrategyImpl()}
+	};
+	
+	
+	
+	
    	BindingFlags BINDING_FLAGS=BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
 	private static Type EXPECTED_TYPE=typeof(Persistent);
 	
@@ -88,15 +120,9 @@ public abstract class PersistentMonoSingleton<T> : MonoSingleton<T> where T:Mono
 		foreach (PlayerPrefEntry item in ppe) {
 			string key=getPreferenceKey(classAtribute,item);
 			object fieldValue=item.fieldValue;
-			if (fieldValue is int){
-					PlayerPrefs.SetInt(key, (int)fieldValue);
-				} else if(fieldValue is float){
-					PlayerPrefs.SetFloat(key, (float)fieldValue);
-				} else if(fieldValue is string){
-					PlayerPrefs.SetString(key, (string)fieldValue);
-				} else {
-					Debug.LogWarning("Cant save property, unsuported type "+item.fieldValue.GetType());
-				}
+			
+			PlayerPrefsContext context=new PlayerPrefsContext(strategyDictionary[fieldValue.GetType()]);
+			context.writeToPlayerPrefs(key,fieldValue);	//FIXME try catch handler		
 		}
 		
 		PlayerPrefs.Save();
@@ -111,20 +137,13 @@ public abstract class PersistentMonoSingleton<T> : MonoSingleton<T> where T:Mono
 			
 			string key=getPreferenceKey(classAtribute,item);				
 			Type fieldType=item.fieldType;
-			object newValue=new object();			
-			if (fieldType== typeof(int)){
-					newValue = PlayerPrefs.GetInt(key);
-				} else if(fieldType== typeof(float)){
-					newValue = PlayerPrefs.GetFloat(key);
-				} else if(fieldType== typeof(string)){
-					newValue = PlayerPrefs.GetString(key);
-				} else {
-					Debug.LogWarning("Cant read property, unsuported type "+item);
-					continue;
-				}
+			
+			
+			PlayerPrefsContext context=new PlayerPrefsContext(strategyDictionary[fieldType]);
+			object newValue=context.readFromPlayerPrefs(key); //FIXME try catch handle
+			
 			FieldInfo fieldInfo = typeof(T).GetField(item.fieldName, BINDING_FLAGS);	
-			if (newValue!=null)
-				fieldInfo.SetValue(this,newValue);
+			fieldInfo.SetValue(this,newValue);
 		}
 		
 		PlayerPrefs.Save();
