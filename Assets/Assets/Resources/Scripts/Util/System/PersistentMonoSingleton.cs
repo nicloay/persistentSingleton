@@ -33,12 +33,13 @@ struct PlayerPrefEntry{
 
 public abstract class PersistentMonoSingleton<T> : MonoSingleton<T> where T:MonoSingleton<T>
 {		
-	private static Dictionary<Type,PlayerPrefsStrategyInterface> strategyDictionary=new Dictionary<Type, PlayerPrefsStrategyInterface>()
+	private static Dictionary<Type,PlayerPrefsContext> strategyContextDictionary=new Dictionary<Type, PlayerPrefsContext>()
 	{
-		{typeof(int),new IntPlayerPrefsStrategyImpl()},
-		{typeof(float),new FloatPlayerPrefsStrategyImpl()},
-		{typeof(string),new StringPlayerPrefsStrategyImpl()},
-		{typeof(bool),new BoolPlayerPrefsStrategyImpl()}
+		{typeof(int),new PlayerPrefsContext(new IntPlayerPrefsStrategyImpl())},
+		{typeof(float),new PlayerPrefsContext(new FloatPlayerPrefsStrategyImpl())},
+		{typeof(string),new PlayerPrefsContext(new StringPlayerPrefsStrategyImpl())},
+		{typeof(bool),new PlayerPrefsContext(new BoolPlayerPrefsStrategyImpl())},
+		{typeof(Vector2),new PlayerPrefsContext(new Vector2PlayerPrefsStrategyImpl())}
 	};
 	
 	
@@ -99,8 +100,7 @@ public abstract class PersistentMonoSingleton<T> : MonoSingleton<T> where T:Mono
 			string key=getPreferenceKey(classAtribute,item);
 			object fieldValue=item.fieldValue;
 			
-			PlayerPrefsContext context=new PlayerPrefsContext(strategyDictionary[fieldValue.GetType()]);
-			context.writeToPlayerPrefs(key,fieldValue);	//FIXME try catch handler		
+			strategyContextDictionary[fieldValue.GetType()].writeToPlayerPrefs(key,fieldValue);	//FIXME try catch handler		
 		}
 		
 		PlayerPrefs.Save();
@@ -116,9 +116,7 @@ public abstract class PersistentMonoSingleton<T> : MonoSingleton<T> where T:Mono
 			string key=getPreferenceKey(classAtribute,item);				
 			Type fieldType=item.fieldType;
 			
-			
-			PlayerPrefsContext context=new PlayerPrefsContext(strategyDictionary[fieldType]);
-			object newValue=context.readFromPlayerPrefs(key); //FIXME try catch handle
+			object newValue=strategyContextDictionary[fieldType].readFromPlayerPrefs(key); //FIXME try catch handle
 			
 			FieldInfo fieldInfo = typeof(T).GetField(item.fieldName, BINDING_FLAGS);	
 			fieldInfo.SetValue(this,newValue);
