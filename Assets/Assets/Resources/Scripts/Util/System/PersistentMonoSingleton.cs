@@ -39,7 +39,8 @@ public abstract class PersistentMonoSingleton<T> : MonoSingleton<T> where T:Mono
 		{typeof(float),new PlayerPrefsContext(new FloatPlayerPrefsStrategyImpl())},
 		{typeof(string),new PlayerPrefsContext(new StringPlayerPrefsStrategyImpl())},
 		{typeof(bool),new PlayerPrefsContext(new BoolPlayerPrefsStrategyImpl())},
-		{typeof(Vector2),new PlayerPrefsContext(new Vector2PlayerPrefsStrategyImpl())}
+		{typeof(Vector2),new PlayerPrefsContext(new Vector2PlayerPrefsStrategyImpl())},
+		{typeof(Vector3),new PlayerPrefsContext(new Vector3PlayerPrefsStrategyImpl())}
 	};
 	
 	

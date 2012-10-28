@@ -54,6 +54,23 @@ public class TestHUD : MonoBehaviour {
 		} catch {}
 		
 		
+		//Vector3 var
+		startY+=offset;		
+		try{
+			GUI.Label(new Rect(10, startY, 100, 20),"myVector3");
+			Vector3 v3=PlayerPreferences.instance.myVector3;
+			GUI.Label(new Rect(110, startY, 10, 20),"x");
+			float x = float.Parse( GUI.TextField(new Rect(120, startY, 80, 20), ""+v3.x , 25));
+			GUI.Label(new Rect(210, startY, 10, 20),"y");
+			float y = float.Parse( GUI.TextField(new Rect(220, startY, 90, 20), ""+v3.y , 25));			
+			GUI.Label(new Rect(310, startY, 10, 20),"y");
+			float z = float.Parse( GUI.TextField(new Rect(320, startY, 90, 20), ""+v3.z , 25));			
+			
+			
+			
+			PlayerPreferences.instance.myVector3=new Vector3(x,y,z);
+		} catch {}
+		
 		
 		
 		

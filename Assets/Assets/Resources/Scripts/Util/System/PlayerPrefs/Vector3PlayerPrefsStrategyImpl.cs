@@ -2,13 +2,13 @@ using System;
 using UnityEngine;
 
 
-public class Vector2PlayerPrefsStrategyImpl:PlayerPrefsStrategyInterface
+public class Vector3PlayerPrefsStrategyImpl:PlayerPrefsStrategyInterface
 {
 	#region PlayerPrefsStrategyInterface implementation
 	public void writeToPlayerPrefs (string key, object obj)
 	{
-		Vector2 v2=(Vector2)obj;
-		float[] floatArray=new float[]{v2.x,v2.y};
+		Vector3 v3=(Vector3)obj;
+		float[] floatArray=new float[]{v3.x,v3.y,v3.z};
 		string str=ConverterUtils.convertFloatArrayToString(floatArray);
 		PlayerPrefs.SetString(key,str);
 	}
@@ -17,12 +17,11 @@ public class Vector2PlayerPrefsStrategyImpl:PlayerPrefsStrategyInterface
 	{
 		string str=PlayerPrefs.GetString(key);
 		float[] floatArray=ConverterUtils.convertStringToFloatArray(str);
-		Vector2 v2=Vector2.zero;
-		if (floatArray.Length==2){
-			v2=new Vector2(floatArray[0],floatArray[1]);
-			
+		Vector3 v3=Vector3.zero;
+		if (floatArray.Length==3){
+			v3=new Vector3(floatArray[0],floatArray[1],floatArray[2]);			
 		}
-		return (object)v2;
+		return (object)v3;
 		
 	}
 	#endregion

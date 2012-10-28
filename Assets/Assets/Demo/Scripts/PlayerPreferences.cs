@@ -39,9 +39,11 @@ public class PlayerPreferences
 	
 	[Persistent]
 	public bool myBool;
-	
-	
+		
 	[Persistent]		
 	public Vector2 myVector2;
+	
+	[Persistent]
+	public Vector3 myVector3;
 		
 }
