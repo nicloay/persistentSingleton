@@ -45,5 +45,12 @@ public class PlayerPreferences
 	
 	[Persistent]
 	public Vector3 myVector3;
+	
+	
+	[Persistent]
+	public Quaternion myQuaternion;
+	
+	[Persistent]
+	public Color myColor;
 		
 }
